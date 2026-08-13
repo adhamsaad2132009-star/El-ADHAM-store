@@ -1,60 +1,85 @@
-// El-ADHAM Store - JavaScript
+const products = [
+  {
+    name: "EL-ADHAM T-Shirt",
+    price: 700,
+    frontImage: "https://via.placeholder.com/500x600?text=EL-ADHAM+FRONT",
+    backImage: "https://via.placeholder.com/500x600?text=EL-ADHAM+BACK",
+    description: "تيشيرت EL-ADHAM بتصميم مميز وخامة مريحة."
+  }
+];
 
-document.addEventListener("DOMContentLoaded", function () {
+const container = document.getElementById("productsContainer");
 
-    // زر إضافة المنتج للسلة
-    const buttons = document.querySelectorAll(".add-to-cart");
+container.innerHTML = "";
 
-    buttons.forEach(function (button) {
-        button.addEventListener("click", function () {
+products.forEach((product) => {
+  const card = document.createElement("div");
+  card.className = "card";
 
-            const product =
-                button.closest(".product") ||
-                button.closest(".card");
+  card.innerHTML = `
+    <img src="${product.frontImage}" alt="${product.name}">
 
-            let productName = "المنتج";
+    <div class="name">${product.name}</div>
 
-            if (product) {
-                const nameElement =
-                    product.querySelector("h2") ||
-                    product.querySelector("h3") ||
-                    product.querySelector(".product-name");
+    <div class="price">${product.price} جنيه</div>
 
-                if (nameElement) {
-                    productName = nameElement.textContent.trim();
-                }
-            }
+    <p>${product.description}</p>
 
-            alert("تم إضافة " + productName + " إلى السلة 🛒");
-        });
-    });
+    <label for="size">اختار المقاس:</label>
 
-    // البحث عن المنتجات
-    const searchInput =
-        document.querySelector("#search") ||
-        document.querySelector(".search-input");
+    <select id="size">
+      <option value="M">M</option>
+      <option value="L">L</option>
+      <option value="XL">XL</option>
+      <option value="2XL">2XL</option>
+    </select>
 
-    if (searchInput) {
-        searchInput.addEventListener("input", function () {
+    <br><br>
 
-            const searchText = searchInput.value.toLowerCase().trim();
+    <button onclick="showBack('${product.backImage}')">
+      صورة الظهر
+    </button>
 
-            const products = document.querySelectorAll(
-                ".product, .card, .product-card"
-            );
+    <button onclick="buyNow('${product.name}', ${product.price})">
+      اطلب الآن
+    </button>
+  `;
 
-            products.forEach(function (product) {
+  container.appendChild(card);
+});
 
-                const text = product.textContent.toLowerCase();
+function showBack(image) {
+  const win = window.open("", "_blank");
 
-                if (text.includes(searchText)) {
-                    product.style.display = "";
-                } else {
-                    product.style.display = "none";
-                }
+  win.document.write(`
+    <html lang="ar" dir="rtl">
+      <head>
+        <meta charset="UTF-8">
+        <title>صورة الظهر</title>
+      </head>
 
-            });
-        });
-    }
+      <body style="text-align:center;font-family:Arial;">
+        <h2>EL-ADHAM - صورة الظهر</h2>
+        <img src="${image}" style="max-width:90%;border-radius:15px;">
+      </body>
+    </html>
+  `);
+}
 
-    //
+function buyNow(name, price) {
+  const sizeSelect = document.querySelector("select");
+  const size = sizeSelect.value;
+
+  const message =
+    `مرحباً EL-ADHAM 👕%0A` +
+    `أريد طلب: ${name}%0A` +
+    `السعر: ${price} جنيه%0A` +
+    `المقاس: ${size}`;
+
+  const whatsappNumber = "201027380152";
+
+  window.open(
+    `https://wa.me/${whatsappNumber}?text=${message}`,
+    "_blank"
+  );
+}
