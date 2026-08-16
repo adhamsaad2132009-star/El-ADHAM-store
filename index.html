@@ -1,1 +1,230 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EL-ADHAM STORE</title>
 
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f5f5f5;
+      color: #222;
+    }
+
+    header {
+      background: #111;
+      color: white;
+      text-align: center;
+      padding: 25px 15px;
+    }
+
+    header h1 {
+      margin: 0 0 8px;
+      font-size: 30px;
+    }
+
+    header p {
+      margin: 0;
+      color: #ccc;
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: 30px auto;
+      padding: 0 15px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+      gap: 20px;
+    }
+
+    .card {
+      background: white;
+      border-radius: 15px;
+      padding: 15px;
+      text-align: center;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      transition: 0.2s;
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+    }
+
+    .card img {
+      width: 100%;
+      height: 250px;
+      object-fit: cover;
+      border-radius: 12px;
+    }
+
+    .name {
+      font-size: 20px;
+      font-weight: bold;
+      margin-top: 15px;
+    }
+
+    .price {
+      color: #159957;
+      font-size: 18px;
+      font-weight: bold;
+      margin: 10px 0;
+    }
+
+    button {
+      border: none;
+      border-radius: 8px;
+      padding: 11px 15px;
+      margin: 4px;
+      cursor: pointer;
+      font-size: 15px;
+      color: white;
+      background: #2979ff;
+    }
+
+    button:hover {
+      opacity: 0.85;
+    }
+
+    .buy {
+      background: #16a34a;
+    }
+
+    #detailsModal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.65);
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    #detailsContent {
+      background: white;
+      width: 100%;
+      max-width: 420px;
+      border-radius: 15px;
+      padding: 25px;
+      text-align: right;
+    }
+
+    #detailName {
+      margin-top: 0;
+    }
+
+    #closeBtn {
+      background: #e53935;
+      width: 100%;
+      margin-top: 15px;
+    }
+
+    footer {
+      text-align: center;
+      padding: 25px;
+      margin-top: 30px;
+      background: #111;
+      color: white;
+    }
+  </style>
+</head>
+
+<body>
+
+  <header>
+    <h1>EL-ADHAM STORE</h1>
+    <p>متجر التيشيرتات الخاص بك 👕</p>
+  </header>
+
+  <main>
+    <div class="container" id="productsContainer"></div>
+  </main>
+
+  <div id="detailsModal">
+    <div id="detailsContent">
+      <h2 id="detailName"></h2>
+      <p id="detailDesc"></p>
+      <button id="closeBtn">إغلاق</button>
+    </div>
+  </div>
+
+  <footer>
+    © 2026 EL-ADHAM STORE
+  </footer>
+
+  <script>
+    const products = [
+      {
+        name: "تيشيرت أزرق",
+        price: "150 جنيه",
+        image: "https://via.placeholder.com/500x500/007bff/ffffff?text=Blue+T-shirt",
+        description: "تيشيرت أزرق مصنوع من قطن ناعم ومريح."
+      },
+      {
+        name: "تيشيرت أسود",
+        price: "180 جنيه",
+        image: "https://via.placeholder.com/500x500/000000/ffffff?text=Black+T-shirt",
+        description: "تيشيرت أسود كلاسيكي يناسب كل الأوقات."
+      },
+      {
+        name: "تيشيرت أبيض",
+        price: "140 جنيه",
+        image: "https://via.placeholder.com/500x500/ffffff/000000?text=White+T-shirt",
+        description: "تيشيرت أبيض بتصميم بسيط وأنيق ومريح."
+      }
+    ];
+
+    const container = document.getElementById("productsContainer");
+    const modal = document.getElementById("detailsModal");
+    const detailName = document.getElementById("detailName");
+    const detailDesc = document.getElementById("detailDesc");
+
+    products.forEach((product, index) => {
+      const card = document.createElement("div");
+      card.className = "card";
+
+      card.innerHTML = `
+        <img src="${product.image}" alt="${product.name}">
+        <div class="name">${product.name}</div>
+        <div class="price">${product.price}</div>
+
+        <button onclick="showDetails(${index})">
+          تفاصيل أكثر
+        </button>
+
+        <button class="buy" onclick="buyNow('${product.name}')">
+          اشترِ الآن
+        </button>
+      `;
+
+      container.appendChild(card);
+    });
+
+    function showDetails(index) {
+      detailName.textContent = products[index].name;
+      detailDesc.textContent = products[index].description;
+      modal.style.display = "flex";
+    }
+
+    document.getElementById("closeBtn").onclick = function() {
+      modal.style.display = "none";
+    };
+
+    modal.onclick = function(event) {
+      if (event.target === modal) {
+        modal.style.display = "none";
+      }
+    };
+
+    function buyNow(name) {
+      alert("شكراً لاختيارك " + name + "! سيتم تحويلك لصفحة الدفع قريباً.");
+    }
+  </script>
+
+</body>
+</html>
